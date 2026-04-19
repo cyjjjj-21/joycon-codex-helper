@@ -51,6 +51,8 @@ final class ControllerInputRouter {
 
     private func wire(target: InputAliasTarget, action: Action, on input: GCPhysicalInputProfile) {
         switch target.kind {
+        case .hidButton:
+            return
         case .button:
             guard let button = resolveButton(named: target.name, on: input) else {
                 logger.info("Button alias \(target.name) is unavailable on this controller")
@@ -128,6 +130,8 @@ final class ControllerInputRouter {
 
     private func clear(target: InputAliasTarget, on input: GCPhysicalInputProfile) {
         switch target.kind {
+        case .hidButton:
+            return
         case .button:
             resolveButton(named: target.name, on: input)?.pressedChangedHandler = nil
         case .dpadDirection:

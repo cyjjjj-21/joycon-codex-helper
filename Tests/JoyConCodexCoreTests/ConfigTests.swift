@@ -18,7 +18,10 @@ func validConfig_loadsAndValidates() throws {
     #expect(profile.disabledInputs.contains("SR"))
     #expect(bindings[.togglePlanMode]?.type == .emitHotkey)
     #expect(targets.codex.bundleIdentifier == "com.openai.codex")
-    #expect(aliases.aliases["R3"]?.first?.name == "rightThumbstickButton")
+    #expect(aliases.aliases["ZR"]?.first?.kind == .hidButton)
+    #expect(aliases.aliases["ZR"]?.first?.usage == 0x10)
+    #expect(aliases.aliases["R3"]?.first?.kind == .hidButton)
+    #expect(aliases.aliases["R3"]?.first?.usage == 0x0c)
 
     try validator.validate(profile: profile, bindings: bindings, targets: targets, inputAliases: aliases)
 }
@@ -123,10 +126,10 @@ private func sampleAliases() -> InputAliasRegistry {
         "B": [.init(kind: .button, name: "b")],
         "Y": [.init(kind: .button, name: "y")],
         "A": [.init(kind: .button, name: "a")],
-        "ZR": [.init(kind: .button, name: "rightTrigger")],
-        "R": [.init(kind: .button, name: "rightShoulder")],
+        "ZR": [.init(kind: .hidButton, name: "joyConRZR", usagePage: 0x09, usage: 0x10)],
+        "R": [.init(kind: .hidButton, name: "joyConRR", usagePage: 0x09, usage: 0x0f)],
         "+": [.init(kind: .button, name: "menu")],
-        "R3": [.init(kind: .button, name: "rightThumbstickButton")],
-        "Home": [.init(kind: .button, name: "home")]
+        "R3": [.init(kind: .hidButton, name: "joyConRR3", usagePage: 0x09, usage: 0x0c)],
+        "Home": [.init(kind: .hidButton, name: "joyConRHome", usagePage: 0x09, usage: 0x0d)]
     ])
 }

@@ -1,6 +1,7 @@
 public enum InputAliasKind: String, Codable, Sendable, Equatable {
     case button
     case dpadDirection
+    case hidButton
 }
 
 public enum InputAliasDirection: String, Codable, Sendable, Equatable {
@@ -14,11 +15,21 @@ public struct InputAliasTarget: Codable, Sendable, Equatable {
     public let kind: InputAliasKind
     public let name: String
     public let direction: InputAliasDirection?
+    public let usagePage: Int?
+    public let usage: Int?
 
-    public init(kind: InputAliasKind, name: String, direction: InputAliasDirection? = nil) {
+    public init(
+        kind: InputAliasKind,
+        name: String,
+        direction: InputAliasDirection? = nil,
+        usagePage: Int? = nil,
+        usage: Int? = nil
+    ) {
         self.kind = kind
         self.name = name
         self.direction = direction
+        self.usagePage = usagePage
+        self.usage = usage
     }
 }
 

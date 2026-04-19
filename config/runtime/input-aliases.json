@@ -4,14 +4,14 @@
     "B": [{ "kind": "button", "name": "b" }],
     "Y": [{ "kind": "button", "name": "y" }],
     "A": [{ "kind": "button", "name": "a" }],
-    "ZR": [{ "kind": "button", "name": "rightTrigger" }],
-    "R": [{ "kind": "button", "name": "rightShoulder" }],
+    "ZR": [{ "kind": "hidButton", "name": "joyConRZR", "usagePage": 9, "usage": 16 }],
+    "R": [{ "kind": "hidButton", "name": "joyConRR", "usagePage": 9, "usage": 15 }],
     "+": [
       { "kind": "button", "name": "menu" },
       { "kind": "button", "name": "options" }
     ],
-    "R3": [{ "kind": "button", "name": "rightThumbstickButton" }],
-    "Home": [{ "kind": "button", "name": "home" }],
+    "R3": [{ "kind": "hidButton", "name": "joyConRR3", "usagePage": 9, "usage": 12 }],
+    "Home": [{ "kind": "hidButton", "name": "joyConRHome", "usagePage": 9, "usage": 13 }],
     "RightStickUp": [{ "kind": "dpadDirection", "name": "rightThumbstick", "direction": "up" }],
     "RightStickDown": [{ "kind": "dpadDirection", "name": "rightThumbstick", "direction": "down" }],
     "RightStickLeft": [{ "kind": "dpadDirection", "name": "rightThumbstick", "direction": "left" }],

@@ -8,6 +8,7 @@ final class JoyConCodexAppDelegate: NSObject, NSApplicationDelegate {
     private var controllerMonitor: ControllerMonitor?
     private var batteryMonitor: BatteryMonitor?
     private var hotkeyListener: HotkeyListener?
+    private var rawHIDInputRouter: RawHIDInputRouter?
     private var keyboardEmitter: KeyboardEventSending?
     private var logger: Logger?
 
@@ -57,6 +58,12 @@ final class JoyConCodexAppDelegate: NSObject, NSApplicationDelegate {
                 actionDispatcher: actionDispatcher,
                 logger: logger
             )
+            let rawHIDInputRouter = RawHIDInputRouter(
+                actionMap: HIDButtonActionMap(profile: configuration.profile, aliases: configuration.inputAliases),
+                actionDispatcher: actionDispatcher,
+                logger: logger
+            )
+            self.rawHIDInputRouter = rawHIDInputRouter
 
             let controllerMonitor = ControllerMonitor(
                 statusStore: statusStore,
@@ -95,6 +102,7 @@ final class JoyConCodexAppDelegate: NSObject, NSApplicationDelegate {
             }
 
             controllerMonitor.start()
+            rawHIDInputRouter.start()
             batteryMonitor.start(
                 with: { [weak controllerMonitor] in
                     controllerMonitor?.selectedController()
@@ -115,6 +123,7 @@ final class JoyConCodexAppDelegate: NSObject, NSApplicationDelegate {
         } catch {
             logger?.error("Failed to release held keys while terminating: \(error)")
         }
+        rawHIDInputRouter?.stop()
         batteryMonitor?.stop()
     }
 }
