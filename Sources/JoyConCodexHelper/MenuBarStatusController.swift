@@ -11,6 +11,7 @@ final class MenuBarStatusController: NSObject {
         super.init()
         let menu = NSMenu()
         menu.addItem(menuItem(title: "Open Accessibility Settings", action: #selector(openAccessibilitySettings), keyEquivalent: ""))
+        menu.addItem(menuItem(title: "Open Bluetooth Settings", action: #selector(openBluetoothSettings), keyEquivalent: ""))
         menu.addItem(NSMenuItem.separator())
         menu.addItem(menuItem(title: "Quit JoyConCodexHelper", action: #selector(quit), keyEquivalent: "q"))
         statusItem.menu = menu
@@ -53,6 +54,14 @@ final class MenuBarStatusController: NSObject {
     @objc
     private func openAccessibilitySettings() {
         guard let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility") else {
+            return
+        }
+        NSWorkspace.shared.open(url)
+    }
+
+    @objc
+    private func openBluetoothSettings() {
+        guard let url = URL(string: "x-apple.systempreferences:com.apple.BluetoothSettings") else {
             return
         }
         NSWorkspace.shared.open(url)
