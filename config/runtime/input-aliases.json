@@ -1,0 +1,20 @@
+{
+  "aliases": {
+    "X": [{ "kind": "button", "name": "x" }],
+    "B": [{ "kind": "button", "name": "b" }],
+    "Y": [{ "kind": "button", "name": "y" }],
+    "A": [{ "kind": "button", "name": "a" }],
+    "ZR": [{ "kind": "button", "name": "rightTrigger" }],
+    "R": [{ "kind": "button", "name": "rightShoulder" }],
+    "+": [
+      { "kind": "button", "name": "menu" },
+      { "kind": "button", "name": "options" }
+    ],
+    "R3": [{ "kind": "button", "name": "rightThumbstickButton" }],
+    "Home": [{ "kind": "button", "name": "home" }],
+    "RightStickUp": [{ "kind": "dpadDirection", "name": "rightThumbstick", "direction": "up" }],
+    "RightStickDown": [{ "kind": "dpadDirection", "name": "rightThumbstick", "direction": "down" }],
+    "RightStickLeft": [{ "kind": "dpadDirection", "name": "rightThumbstick", "direction": "left" }],
+    "RightStickRight": [{ "kind": "dpadDirection", "name": "rightThumbstick", "direction": "right" }]
+  }
+}

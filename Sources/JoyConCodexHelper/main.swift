@@ -1,0 +1,126 @@
+import AppKit
+import Foundation
+import JoyConCodexCore
+
+@MainActor
+final class JoyConCodexAppDelegate: NSObject, NSApplicationDelegate {
+    private var menuBarController: MenuBarStatusController?
+    private var controllerMonitor: ControllerMonitor?
+    private var batteryMonitor: BatteryMonitor?
+    private var hotkeyListener: HotkeyListener?
+    private var keyboardEmitter: KeyboardEventSending?
+    private var logger: Logger?
+
+    func applicationDidFinishLaunching(_ notification: Notification) {
+        let logger = Logger()
+        self.logger = logger
+        do {
+            let configuration = try AppConfigurationLoader().load(from: URL(fileURLWithPath: FileManager.default.currentDirectoryPath))
+            let statusStore = StatusStore(lowBatteryThreshold: configuration.controllerPreferences.lowBatteryThreshold)
+            let menuBarController = MenuBarStatusController(statusStore: statusStore)
+            self.menuBarController = menuBarController
+
+            let targetConfig = TargetAppConfiguration(targets: configuration.targets)
+            let frontmostAppMonitor = FrontmostAppMonitor(
+                provider: WorkspaceFrontmostAppProvider(),
+                target: targetConfig
+            )
+            let keyboardEmitter = CGEventKeyboardEmitter()
+            self.keyboardEmitter = keyboardEmitter
+            let planToggler = AppleScriptPlanModeToggler(keyboardEmitter: keyboardEmitter)
+            let planModeRouter = PlanModeRouter(
+                frontmostAppMonitor: frontmostAppMonitor,
+                toggler: planToggler,
+                logger: logger
+            )
+            let recoveryCoordinator = ControllerRecoveryCoordinator(
+                logger: logger,
+                releaseHeldKeys: {
+                    try keyboardEmitter.releaseAllHolds()
+                }
+            ) { [weak self] in
+                self?.controllerMonitor?.refreshControllerSelection()
+            }
+            let actionDispatcher = ActionDispatcher(
+                bindings: configuration.bindings,
+                frontmostAppMonitor: frontmostAppMonitor,
+                planModeRouter: planModeRouter,
+                keyboardEmitter: keyboardEmitter,
+                logger: logger,
+                manualRecover: {
+                    recoveryCoordinator.attemptRecovery()
+                }
+            )
+            let inputRouter = ControllerInputRouter(
+                profile: configuration.profile,
+                aliases: configuration.inputAliases,
+                actionDispatcher: actionDispatcher,
+                logger: logger
+            )
+
+            let controllerMonitor = ControllerMonitor(
+                statusStore: statusStore,
+                controllerPreferences: configuration.controllerPreferences,
+                inputRouter: inputRouter,
+                logger: logger,
+                releaseHeldKeys: {
+                    try keyboardEmitter.releaseAllHolds()
+                }
+            ) { [weak menuBarController] in
+                menuBarController?.refresh()
+            }
+            self.controllerMonitor = controllerMonitor
+
+            let batteryMonitor = BatteryMonitor(
+                statusStore: statusStore,
+                threshold: configuration.controllerPreferences.lowBatteryThreshold
+            ) { [weak menuBarController] in
+                menuBarController?.refresh()
+            }
+            self.batteryMonitor = batteryMonitor
+
+            if let planBinding = configuration.bindings[.togglePlanMode], let hotkey = planBinding.key {
+                hotkeyListener = try HotkeyListener(key: hotkey, modifiers: planBinding.modifiers ?? []) {
+                    do {
+                        try planModeRouter.handle(.togglePlanModeRequested)
+                    } catch {
+                        logger.error("Hotkey plan toggle failed: \(error)")
+                    }
+                }
+                try hotkeyListener?.start()
+            }
+
+            if !AccessibilityPermissions.isTrusted() {
+                logger.info("Accessibility permission is not granted yet; key injection will not work until it is enabled for the helper process.")
+            }
+
+            controllerMonitor.start()
+            batteryMonitor.start(
+                with: { [weak controllerMonitor] in
+                    controllerMonitor?.selectedController()
+                },
+                pollInterval: configuration.controllerPreferences.batteryPollIntervalSeconds
+            )
+
+            logger.info("JoyConCodexHelper is running")
+        } catch {
+            logger.error("Failed to start JoyConCodexHelper: \(error)")
+            NSApplication.shared.terminate(nil)
+        }
+    }
+
+    func applicationWillTerminate(_ notification: Notification) {
+        do {
+            try keyboardEmitter?.releaseAllHolds()
+        } catch {
+            logger?.error("Failed to release held keys while terminating: \(error)")
+        }
+        batteryMonitor?.stop()
+    }
+}
+
+let app = NSApplication.shared
+let delegate = JoyConCodexAppDelegate()
+app.delegate = delegate
+app.setActivationPolicy(.accessory)
+app.run()

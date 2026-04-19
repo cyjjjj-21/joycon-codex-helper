@@ -1,0 +1,22 @@
+{
+  "profileName": "layout-v1-default",
+  "physicalToAction": {
+    "X": "move_up",
+    "B": "move_down",
+    "Y": "move_left",
+    "A": "move_right",
+    "ZR": "voice_hold",
+    "R": "confirm",
+    "+": "delete_left",
+    "R3": "toggle_plan_mode",
+    "Home": "manual_recover"
+  },
+  "disabledInputs": [
+    "RightStickUp",
+    "RightStickDown",
+    "RightStickLeft",
+    "RightStickRight",
+    "SL",
+    "SR"
+  ]
+}

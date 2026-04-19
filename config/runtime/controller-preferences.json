@@ -1,0 +1,7 @@
+{
+  "preferredControllerNameContains": [
+    "Joy-Con (R)"
+  ],
+  "batteryPollIntervalSeconds": 20,
+  "lowBatteryThreshold": 0.2
+}

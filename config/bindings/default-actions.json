@@ -1,0 +1,11 @@
+{
+  "move_up": { "type": "key", "key": "UpArrow" },
+  "move_down": { "type": "key", "key": "DownArrow" },
+  "move_left": { "type": "key", "key": "LeftArrow" },
+  "move_right": { "type": "key", "key": "RightArrow" },
+  "delete_left": { "type": "key", "key": "Backspace" },
+  "confirm": { "type": "key", "key": "Return" },
+  "voice_hold": { "type": "keyComboHold", "modifiers": ["Control"], "key": "M" },
+  "toggle_plan_mode": { "type": "emitHotkey", "key": "F18" },
+  "manual_recover": { "type": "noOpHint", "label": "manual recover attempt" }
+}
