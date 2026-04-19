@@ -4,7 +4,7 @@
 
 > 当前版本：`v0.1.0` 试玩版。项目专注于 macOS + Codex Desktop + 右手 `Joy-Con (R)` 的个人效率工作流，不隶属于 Nintendo、OpenAI 或 Apple。
 
-![右手 Joy-Con 键位图](docs/assets/keymap.png)
+![右手 Joy-Con 键位图](docs/assets/keymap-readme-v2.png)
 
 ## 它解决什么问题
 
@@ -18,7 +18,7 @@
 - 使用 `Home` 触发一次控制器恢复扫描。
 - 菜单栏展示 Joy-Con 连接与电量状态，低电量时发出提示音。
 
-![语音到 Codex 的工作流](docs/assets/workflow.png)
+![语音到 Codex 的工作流](docs/assets/workflow-readme-v2.png)
 
 ## 默认键位
 
@@ -75,7 +75,7 @@ jch logs
 6. 回到 Codex，把焦点放进 composer 或 Plan 选项区域。
 7. 按住 `ZR` 说话，松开停止听写。
 
-![菜单栏入口示意图](docs/assets/menu.png)
+![菜单栏入口示意图](docs/assets/menu-readme-v2.png)
 
 ## 菜单栏
 
