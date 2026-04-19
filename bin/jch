@@ -3,6 +3,13 @@ set -euo pipefail
 
 SCRIPT_PATH="${0:A}"
 HELPER_DIR="${SCRIPT_PATH:h:h}"
+LOG_PATH="$HOME/Library/Logs/JoyConCodexHelper.log"
+
+if [[ "${1:-}" == "logs" ]]; then
+  mkdir -p "${LOG_PATH:h}"
+  touch "$LOG_PATH"
+  exec tail -f "$LOG_PATH"
+fi
 
 cd "$HELPER_DIR"
 exec swift run JoyConCodexHelper

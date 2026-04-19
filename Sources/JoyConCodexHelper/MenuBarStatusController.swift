@@ -10,9 +10,9 @@ final class MenuBarStatusController: NSObject {
         self.statusStore = statusStore
         super.init()
         let menu = NSMenu()
-        menu.addItem(withTitle: "Open Accessibility Settings", action: #selector(openAccessibilitySettings), keyEquivalent: "")
+        menu.addItem(menuItem(title: "Open Accessibility Settings", action: #selector(openAccessibilitySettings), keyEquivalent: ""))
         menu.addItem(NSMenuItem.separator())
-        menu.addItem(withTitle: "Quit JoyConCodexHelper", action: #selector(quit), keyEquivalent: "q")
+        menu.addItem(menuItem(title: "Quit JoyConCodexHelper", action: #selector(quit), keyEquivalent: "q"))
         statusItem.menu = menu
         refresh()
     }
@@ -34,6 +34,13 @@ final class MenuBarStatusController: NSObject {
 
     func refresh() {
         statusItem.button?.title = statusSummary()
+    }
+
+    private func menuItem(title: String, action: Selector, keyEquivalent: String) -> NSMenuItem {
+        let item = NSMenuItem(title: title, action: action, keyEquivalent: keyEquivalent)
+        item.target = self
+        item.isEnabled = true
+        return item
     }
 
     private func shortName(_ name: String) -> String {
