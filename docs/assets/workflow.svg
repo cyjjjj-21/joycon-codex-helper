@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-label="Joy-Con 到 Codex 的工作流">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#eef5ea"/>
+      <stop offset="1" stop-color="#f8ebdb"/>
+    </linearGradient>
+    <marker id="arrow" markerWidth="14" markerHeight="14" refX="11" refY="7" orient="auto">
+      <path d="M 0 0 L 14 7 L 0 14 z" fill="#56705a"/>
+    </marker>
+    <style>
+      text { font-family: "PingFang SC", "Noto Sans CJK SC", "Helvetica Neue", sans-serif; fill: #223126; }
+      .title { font-size: 42px; font-weight: 800; }
+      .subtitle { font-size: 20px; fill: #637265; }
+      .card { fill: #ffffff; stroke: #b8c8b4; stroke-width: 2.5; }
+      .cardAccent { fill: #f4fbf2; stroke: #9eb69c; stroke-width: 2.5; }
+      .label { font-size: 24px; font-weight: 800; }
+      .small { font-size: 16px; fill: #5d6b60; }
+      .tiny { font-size: 14px; fill: #6c786e; }
+      .pipe { stroke: #56705a; stroke-width: 4; fill: none; marker-end: url(#arrow); stroke-linecap: round; }
+      .pill { fill: #26332d; }
+      .pillText { fill: #ffffff; font-size: 15px; font-weight: 700; }
+    </style>
+  </defs>
+
+  <rect width="1280" height="720" rx="34" fill="url(#bg)"/>
+  <text x="78" y="80" class="title">从 Joy-Con 到 Codex</text>
+  <text x="80" y="118" class="subtitle">V0.1.0 的输入路由、权限和安全释放路径</text>
+
+  <g>
+    <rect class="cardAccent" x="70" y="190" width="230" height="142" rx="28"/>
+    <text x="100" y="232" class="label">Joy-Con (R)</text>
+    <text x="100" y="266" class="small">蓝牙连接到 Mac</text>
+    <rect x="100" y="286" width="152" height="30" rx="15" class="pill"/>
+    <text x="176" y="307" text-anchor="middle" class="pillText">ZR / R / R3 / Home</text>
+  </g>
+
+  <path class="pipe" d="M 310 261 L 402 261"/>
+
+  <g>
+    <rect class="card" x="420" y="170" width="250" height="182" rx="28"/>
+    <text x="450" y="214" class="label">Input Router</text>
+    <text x="450" y="248" class="small">GameController 处理方向键</text>
+    <text x="450" y="276" class="small">raw HID 补齐肩键与 Home</text>
+    <text x="450" y="304" class="tiny">避免 Apple 抽象漏掉 ZR / R3</text>
+  </g>
+
+  <path class="pipe" d="M 680 261 L 772 261"/>
+
+  <g>
+    <rect class="card" x="790" y="170" width="250" height="182" rx="28"/>
+    <text x="820" y="214" class="label">Action Dispatcher</text>
+    <text x="820" y="248" class="small">校验 Codex 是否前台</text>
+    <text x="820" y="276" class="small">把 action 转成键盘事件</text>
+    <text x="820" y="304" class="tiny">Backspace 支持长按 repeat</text>
+  </g>
+
+  <path class="pipe" d="M 1050 261 L 1142 261"/>
+
+  <g>
+    <rect class="cardAccent" x="922" y="438" width="288" height="142" rx="28"/>
+    <text x="952" y="480" class="label">Codex Desktop</text>
+    <text x="952" y="514" class="small">语音听写、Plan mode</text>
+    <text x="952" y="542" class="small">选择、确认、文本编辑</text>
+  </g>
+
+  <path class="pipe" d="M 1166 328 C 1198 384 1186 426 1128 442"/>
+
+  <g>
+    <rect class="card" x="70" y="438" width="300" height="142" rx="28"/>
+    <text x="100" y="480" class="label">Safety Layer</text>
+    <text x="100" y="514" class="small">断连 / recovery / 退出时释放</text>
+    <text x="100" y="542" class="small">避免 Control + M 或连删卡住</text>
+  </g>
+
+  <path class="pipe" d="M 420 509 L 380 509"/>
+  <path class="pipe" d="M 790 509 L 420 509"/>
+
+  <g>
+    <rect class="card" x="440" y="438" width="320" height="142" rx="28"/>
+    <text x="470" y="480" class="label">macOS 权限</text>
+    <text x="470" y="514" class="small">辅助功能权限允许 CGEvent</text>
+    <text x="470" y="542" class="small">蓝牙设置用于连接 Joy-Con</text>
+  </g>
+
+  <rect x="396" y="628" width="488" height="44" rx="22" fill="#ffffff" stroke="#c4cfbd" stroke-width="2"/>
+  <text x="640" y="656" text-anchor="middle" class="small">普通按键不刷屏；Home / Plan toggle / recovery 写入 helper 日志</text>
+</svg>
