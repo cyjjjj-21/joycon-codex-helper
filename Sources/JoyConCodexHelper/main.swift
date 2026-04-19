@@ -10,6 +10,7 @@ final class JoyConCodexAppDelegate: NSObject, NSApplicationDelegate {
     private var hotkeyListener: HotkeyListener?
     private var rawHIDInputRouter: RawHIDInputRouter?
     private var keyboardEmitter: KeyboardEventSending?
+    private var keyRepeater: KeyRepeating?
     private var logger: Logger?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
@@ -28,6 +29,8 @@ final class JoyConCodexAppDelegate: NSObject, NSApplicationDelegate {
             )
             let keyboardEmitter = CGEventKeyboardEmitter()
             self.keyboardEmitter = keyboardEmitter
+            let keyRepeater = TimerKeyRepeater(keyboardEmitter: keyboardEmitter)
+            self.keyRepeater = keyRepeater
             let planToggler = AppleScriptPlanModeToggler(keyboardEmitter: keyboardEmitter)
             let planModeRouter = PlanModeRouter(
                 frontmostAppMonitor: frontmostAppMonitor,
@@ -37,6 +40,7 @@ final class JoyConCodexAppDelegate: NSObject, NSApplicationDelegate {
             let recoveryCoordinator = ControllerRecoveryCoordinator(
                 logger: logger,
                 releaseHeldKeys: {
+                    keyRepeater.stopAll()
                     try keyboardEmitter.releaseAllHolds()
                 }
             ) { [weak self] in
@@ -47,6 +51,7 @@ final class JoyConCodexAppDelegate: NSObject, NSApplicationDelegate {
                 frontmostAppMonitor: frontmostAppMonitor,
                 planModeRouter: planModeRouter,
                 keyboardEmitter: keyboardEmitter,
+                keyRepeater: keyRepeater,
                 logger: logger,
                 manualRecover: {
                     recoveryCoordinator.attemptRecovery()
@@ -71,6 +76,7 @@ final class JoyConCodexAppDelegate: NSObject, NSApplicationDelegate {
                 inputRouter: inputRouter,
                 logger: logger,
                 releaseHeldKeys: {
+                    keyRepeater.stopAll()
                     try keyboardEmitter.releaseAllHolds()
                 }
             ) { [weak menuBarController] in
@@ -118,6 +124,7 @@ final class JoyConCodexAppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationWillTerminate(_ notification: Notification) {
+        keyRepeater?.stopAll()
         do {
             try keyboardEmitter?.releaseAllHolds()
         } catch {

@@ -6,6 +6,7 @@ final class ActionDispatcher {
     private let frontmostAppMonitor: FrontmostAppMonitor
     private let planModeRouter: PlanModeRouter
     private let keyboardEmitter: KeyboardEventSending
+    private let keyRepeater: KeyRepeating
     private let logger: Logger
     private let manualRecover: (() -> Void)?
 
@@ -14,6 +15,7 @@ final class ActionDispatcher {
         frontmostAppMonitor: FrontmostAppMonitor,
         planModeRouter: PlanModeRouter,
         keyboardEmitter: KeyboardEventSending,
+        keyRepeater: KeyRepeating,
         logger: Logger,
         manualRecover: (() -> Void)? = nil
     ) {
@@ -21,6 +23,7 @@ final class ActionDispatcher {
         self.frontmostAppMonitor = frontmostAppMonitor
         self.planModeRouter = planModeRouter
         self.keyboardEmitter = keyboardEmitter
+        self.keyRepeater = keyRepeater
         self.logger = logger
         self.manualRecover = manualRecover
     }
@@ -45,6 +48,17 @@ final class ActionDispatcher {
                     try keyboardEmitter.beginHold(key: binding.key ?? "", modifiers: binding.modifiers ?? [])
                 } else {
                     try keyboardEmitter.endHold(key: binding.key ?? "", modifiers: binding.modifiers ?? [])
+                }
+            case .deleteLeft:
+                guard let binding = bindings[action] else { return }
+                if isPressed {
+                    guard frontmostAppMonitor.isCodexFrontmost else {
+                        logger.info("Ignored delete left because Codex is not frontmost")
+                        return
+                    }
+                    try keyRepeater.start(key: binding.key ?? "", modifiers: binding.modifiers ?? [])
+                } else {
+                    try keyRepeater.stop(key: binding.key ?? "", modifiers: binding.modifiers ?? [])
                 }
             default:
                 guard isPressed else { return }
