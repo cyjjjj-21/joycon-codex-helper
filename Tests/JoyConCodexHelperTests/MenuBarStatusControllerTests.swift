@@ -21,6 +21,25 @@ func menuItems_haveExplicitTargetsSoTheyStayEnabled() {
 }
 
 @MainActor
+@Test
+func disconnectedController_showsOfflineSummary() {
+    let controller = MenuBarStatusController(statusStore: StatusStore())
+
+    #expect(controller.statusSummary() == "Joy-Con offline")
+}
+
+@MainActor
+@Test
+func connectedController_showsOnSummaryWithoutBatteryDetails() {
+    let store = StatusStore()
+    store.updateConnection(controllerName: "Joy-Con (R)", isConnected: true)
+    store.updateBattery(level: 0.12, state: .discharging)
+    let controller = MenuBarStatusController(statusStore: store)
+
+    #expect(controller.statusSummary() == "Joy-Con on")
+}
+
+@MainActor
 private func statusItem(from controller: MenuBarStatusController) -> NSStatusItem {
     let mirror = Mirror(reflecting: controller)
     let child = mirror.children.first { $0.label == "statusItem" }

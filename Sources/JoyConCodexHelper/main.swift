@@ -6,7 +6,6 @@ import JoyConCodexCore
 final class JoyConCodexAppDelegate: NSObject, NSApplicationDelegate {
     private var menuBarController: MenuBarStatusController?
     private var controllerMonitor: ControllerMonitor?
-    private var batteryMonitor: BatteryMonitor?
     private var hotkeyListener: HotkeyListener?
     private var rawHIDInputRouter: RawHIDInputRouter?
     private var keyboardEmitter: KeyboardEventSending?
@@ -84,14 +83,6 @@ final class JoyConCodexAppDelegate: NSObject, NSApplicationDelegate {
             }
             self.controllerMonitor = controllerMonitor
 
-            let batteryMonitor = BatteryMonitor(
-                statusStore: statusStore,
-                threshold: configuration.controllerPreferences.lowBatteryThreshold
-            ) { [weak menuBarController] in
-                menuBarController?.refresh()
-            }
-            self.batteryMonitor = batteryMonitor
-
             if let planBinding = configuration.bindings[.togglePlanMode], let hotkey = planBinding.key {
                 hotkeyListener = try HotkeyListener(key: hotkey, modifiers: planBinding.modifiers ?? []) {
                     do {
@@ -109,12 +100,6 @@ final class JoyConCodexAppDelegate: NSObject, NSApplicationDelegate {
 
             controllerMonitor.start()
             rawHIDInputRouter.start()
-            batteryMonitor.start(
-                with: { [weak controllerMonitor] in
-                    controllerMonitor?.selectedController()
-                },
-                pollInterval: configuration.controllerPreferences.batteryPollIntervalSeconds
-            )
 
             logger.info("JoyConCodexHelper is running")
         } catch {
@@ -131,7 +116,6 @@ final class JoyConCodexAppDelegate: NSObject, NSApplicationDelegate {
             logger?.error("Failed to release held keys while terminating: \(error)")
         }
         rawHIDInputRouter?.stop()
-        batteryMonitor?.stop()
     }
 }
 
