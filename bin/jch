@@ -1,0 +1,8 @@
+#!/usr/bin/env zsh
+set -euo pipefail
+
+SCRIPT_PATH="${0:A}"
+HELPER_DIR="${SCRIPT_PATH:h:h}"
+
+cd "$HELPER_DIR"
+exec swift run JoyConCodexHelper
