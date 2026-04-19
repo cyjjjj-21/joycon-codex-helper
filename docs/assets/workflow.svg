@@ -54,8 +54,6 @@
     <text x="820" y="304" class="tiny">Backspace 支持长按 repeat</text>
   </g>
 
-  <path class="pipe" d="M 1050 261 L 1142 261"/>
-
   <g>
     <rect class="cardAccent" x="922" y="438" width="288" height="142" rx="28"/>
     <text x="952" y="480" class="label">Codex Desktop</text>
@@ -63,7 +61,7 @@
     <text x="952" y="542" class="small">选择、确认、文本编辑</text>
   </g>
 
-  <path class="pipe" d="M 1166 328 C 1198 384 1186 426 1128 442"/>
+  <path class="pipe" d="M 1040 261 C 1164 270 1212 364 1082 438"/>
 
   <g>
     <rect class="card" x="70" y="438" width="300" height="142" rx="28"/>
@@ -72,8 +70,8 @@
     <text x="100" y="542" class="small">避免 Control + M 或连删卡住</text>
   </g>
 
-  <path class="pipe" d="M 420 509 L 380 509"/>
-  <path class="pipe" d="M 790 509 L 420 509"/>
+  <path class="pipe" d="M 440 509 L 386 509"/>
+  <path class="pipe" d="M 760 438 C 790 410 822 384 858 352"/>
 
   <g>
     <rect class="card" x="440" y="438" width="320" height="142" rx="28"/>
