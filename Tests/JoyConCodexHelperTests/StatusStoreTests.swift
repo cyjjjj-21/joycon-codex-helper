@@ -35,6 +35,27 @@ func batteryUnavailable_isExplicitNotFakeZero() {
 }
 
 @Test
+func zeroBatteryLevel_isTreatedAsUnavailableInsteadOfFakeLowBattery() {
+    let store = StatusStore()
+    store.updateConnection(controllerName: "Joy-Con (R)", isConnected: true)
+
+    store.updateBattery(level: 0, state: .discharging)
+
+    #expect(store.snapshot.battery == .unavailable)
+    #expect(!store.snapshot.lowBatteryWarning)
+}
+
+@Test
+func outOfRangeBatteryLevel_isTreatedAsUnavailable() {
+    let store = StatusStore()
+    store.updateConnection(controllerName: "Joy-Con (R)", isConnected: true)
+
+    store.updateBattery(level: 1.2, state: .charging)
+
+    #expect(store.snapshot.battery == .unavailable)
+}
+
+@Test
 func lowBatteryWarning_appearsBelowThreshold() {
     let store = StatusStore()
     store.updateConnection(controllerName: "Joy-Con (R)", isConnected: true)

@@ -49,7 +49,9 @@ final class StatusStore {
         guard
             snapshot.connection != .disconnected,
             let level,
-            let state
+            let state,
+            level > 0,
+            level <= 1
         else {
             snapshot.battery = .unavailable
             return
